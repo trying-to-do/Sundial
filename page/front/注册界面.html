@@ -170,12 +170,8 @@
                 document.getElementById("validate_password_txt").innerHTML = "密码不能为空！";
                 psd.style.border = "1px solid #FF3E41";
             }
-            else {
-                document.getElementById("validate_password_txt").innerHTML = "";
-                psd.style.border = "1px solid #dcdfe6";
-            }
             //验证密码长度
-            if (psd.value.length < 6 || psd.value.length > 16) {
+            else if (psd.value.length < 6 || psd.value.length > 16) {
                 document.getElementById("validate_password_txt").innerHTML = "请输入6-16位的密码！";
                 psd.style.border = "1px solid #FF3E41";
             }
@@ -212,7 +208,7 @@
         <!-- 表单框架 -->
         <form>
             <div class="line">
-                <input type="text" name="username" id="username" placeholder="昵称" onblur="username_validate()" >
+                <input type="text" name="username" id="username" placeholder="昵称" onblur="username_validate()">
                 <p id="validate_username_txt"></p>
             </div>
             <div class="line"></div>
