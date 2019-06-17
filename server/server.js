@@ -11,7 +11,7 @@ var fs = require("fs");
 var util = require("util");
 var mysql = require("mysql");
 var queryString = require("querystring");
-var mySession = require("./../jEasy/back/Session/jEasySession");
+var mySession = require("./jEasySession");
 var UserImformation = /** @class */ (function () {
     function UserImformation(id, name) {
         this.id = id;
@@ -20,14 +20,14 @@ var UserImformation = /** @class */ (function () {
     return UserImformation;
 }());
 // 本地服务器路径
-var serverPath = "F:\读书\web\日晷";
+var serverPath = "E:/Code/Sundial";
 // 请求路径 ==> 函数 表
 var functionMap = new Map();
 var session = new mySession.Session();
 // 连接数据库
 var mysqlConnection = mysql.createConnection({
     host: 'localhost',
-    user: 'root',
+    user: 'codeRanger',
     password: '123456',
     database: 'rigui'
 });
@@ -39,6 +39,12 @@ mysqlConnection.connect(function (error, result) {
         console.log("数据库连接成功！");
     }
 });
+
+functionMap.set('/account/login', accountLogin);
+functionMap.set('/account/register', accountRegister);
+functionMap.set('/account/get', accountGet);
+functionMap.set('/event/get', eventGet);
+functionMap.set('/event/create', eventCreate);
 
 // 创建服务器
 http.createServer(function (request, response) {
@@ -55,14 +61,26 @@ http.createServer(function (request, response) {
         // 如果本次访问不是请求文件
         else if (util.isFunction(value)) {
             var postBody_1 = '';
-
+            // 如果请求头含有cookie
+            if (request.headers.cookie) {
+                // 转化cookie为对象
+                var cookieOjbect = queryString.parse(request.headers.cookie, ';', '=');
+                // 检测会话状态是否存在
+                if (cookieOjbect.id && session.isExists(cookieOjbect.id.toString())) {
+                    // 获取已经启动会话的用户的id和name
+                    var obj = session.getValue(cookieOjbect.id.toString());
+                    userImformation = new UserImformation(obj.id, obj.name);
+                }
+            }
             // 接收报文
             request.on("data", function (chunk) {
                 postBody_1 += chunk;
             });
             // 报文接收完毕
             request.on("end", function () {
-
+                console.log(postBody_1);
+                var jsonObj = JSON.parse(postBody_1);
+                value(response, jsonObj, userImformation);
             });
         }
         // 本次访问需要请求文件
@@ -139,7 +157,7 @@ function printException(error) {
 }
 
 //创建账户
-function accountSign(require, jsonObj) {
+function accountRegister(require, jsonObj) {
     var sql = "select idAccount " + "from account " + "where Username=?";
     var value = [jsonObj.name];
     var returnStr = "";
@@ -150,10 +168,13 @@ function accountSign(require, jsonObj) {
         }
         //如果没有找到用户名
         else if (results.length == 0) {
-            sql = "insert into account" + "(Username,Password,level)" + "values(?,?,1);";
+            sql = "insert into account" + " (name, password, level, age, status)" + " values(?,?,?,?,?);";
             values = [
                 jsonObj.name,
-                jsonObj.password
+                jsonObj.password,
+                jsonObj.level,
+                jsonObj.age,
+                jsonObj.status
             ];
 
             // 插入新注册的用户信息
@@ -176,42 +197,48 @@ function accountSign(require, jsonObj) {
 }
 
 //用户登录
-function accountLogin(response, jsonObj) {
+function accountLogin(response, jsonObj, userImformation) {
     var sql = "select * " +
         "from Account " +
         "where name=? and password=?;";
     var values = [jsonObj.name, jsonObj.password];
     var returnStr = "";
-    // 查询用户名和密码是否存在且匹配
-    mysqlConnection.query(sql, values, function (error, results, fields) {
-        if (error) {
-            printException(error);
-        }
-        // 无查询结果，代表用户名或密码错误
-        else if (results.length == 0) {
-            returnStr = "[" + makeJsonStr(["status", "2", "message", "userName error or passWord error"]) + "]";
-            response.end(returnStr);
-        }
-        // 查询到匹配的用户名和密码
-        else {
-            // 新建一个会话，会话内保存用户id和name
-            var id = "id=" + session.createSessionHandle(new UserImformation(results[0].id, results[0].name));
-            // 设置响应头cookie，cookie信息为会话ID
-            response.writeHead(200, {
-                "Content-Type": "text/plain",
-                "Set-Cookie": id + ';path=/'
-            });
-            returnStr = "[" + makeJsonStr(["status", "0"]) + "]";
-            response.end(returnStr);
-        }
-    });
+    if (!!userImformation) {
+        returnStr = "[" + makeJsonStr(["status", "0"]) + "]";
+        response.end(returnStr);
+    }
+    else {
+        // 查询用户名和密码是否存在且匹配
+        mysqlConnection.query(sql, values, function (error, results, fields) {
+            if (error) {
+                printException(error);
+            }
+            // 无查询结果，代表用户名或密码错误
+            else if (results.length == 0) {
+                returnStr = "[" + makeJsonStr(["status", "2", "message", "userName error or passWord error"]) + "]";
+                response.end(returnStr);
+            }
+            // 查询到匹配的用户名和密码
+            else {
+                // 新建一个会话，会话内保存用户id和name
+                var id = "id=" + session.createSessionHandle(new UserImformation(results[0].id, results[0].name));
+                // 设置响应头cookie，cookie信息为会话ID
+                response.writeHead(200, {
+                    "Content-Type": "text/plain",
+                    "Set-Cookie": id + ';path=/'
+                });
+                returnStr = "[" + makeJsonStr(["status", "0"]) + "]";
+                response.end(returnStr);
+            }
+        });
+    }
 }
 
 //获取用户信息
 function accountGet(response, jsonObj, userImformation) {
     var sql = "select * " +
         "from Account " +
-        "where idAccount=?";
+        "where id=?";
     var values = [userImformation.id];
     var returnStr = "";
     // 查询用户信息
@@ -232,16 +259,40 @@ function accountGet(response, jsonObj, userImformation) {
 }
 
 //获取用户日程
-function eventGet(response, jsonObj) {
-    var sql = "select * " + "from event,account " + "where event.idAccount=account.idAccount and eventdate=?";
-    var values = [];
+function eventGet(response, jsonObj, userImformation) {
+    var sql = "select * " +
+        "from event " +
+        "where event.ownerid=? and eventdate=?";
+    var values = [userImformation.id, jsonObj.date];
     var returnStr = "";
-    mysqlConnection.query(sql, value, function (error, results, fields) {
+    mysqlConnection.query(sql, values, function (error, results, fields) {
         if (error) {
             printException(error);
         }
         else if (results.length == 0) {
-            // returnStr
+            returnStr = queryArrayToJsonStr(results);
+            response.end(returnStr);
         }
     });
+}
+
+//删除日程
+function eventDelete(response, jsonObj, userImformation) {
+    var sql = "delete from event " +
+        "where id=?;"
+    var values = [jsonObj.id];
+    var returnStr = "";
+    mysqlConnection.query(sql, values);
+    returnStr = "[" + makeJsonStr(["status", "0"]) + "]";
+    response.end(returnStr);
+}
+
+//创建日程
+function eventCreate(response, jsonObj, userImformation) {
+    var sql = 'insert into event (date, start, end, type, content, ownerid) ' +
+        "values(?,?,?,?,?,?);";
+    var values = [jsonObj.date, jsonObj.start, jsonObj.end, jsonObj.type, jsonObj.content, userImformation.id];
+    mysqlConnection.query(sql, values);
+    returnStr = "[" + makeJsonStr(["status", "0"]) + "]";
+    response.end(returnStr);
 }
