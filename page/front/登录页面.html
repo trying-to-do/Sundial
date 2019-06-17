@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>日晷 - 让生活变得精确</title>
+    <style>
+        body,
+        div,
+        dl,
+        dt,
+        dd,
+        ul,
+        ol,
+        li,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        pre,
+        code,
+        form,
+        fieldset,
+        legend,
+        input,
+        textarea,
+        p,
+        blockquote,
+        th,
+        td {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #7E6B8F;
+            font-family: -apple-system, BlinkMacSystemFont, Helvetica Neue, PingFang SC, Microsoft YaHei, Source Han Sans SC, Noto Sans CJK SC, WenQuanYi Micro Hei, sans-serif;
+        }
+
+        .login {
+            border-radius: 5px;
+            margin: 0 auto;
+            width: 480px;
+            height: 560px;
+            margin-top: 100px;
+            background-color: hsla(0, 0%, 100%, .75);
+            box-shadow: 0 5px 8px rgba(0, 0, 0, .3);
+            text-align: center;
+            position: relative;
+        }
+
+        .login h1 {
+            font: bolder 60px "微软雅黑";
+            color: #2d2d2d;
+            padding-top: 20px;
+            padding-bottom: 10px;
+        }
+
+        .login h3 {
+            font: lighter 23px "微软雅黑";
+            color: #0094C6;
+        }
+
+        .login .formbox {
+            width: 450px;
+            height: 380px;
+            margin: 0 auto;
+            margin-top: 20px;
+        }
+
+        .login .formbox .line {
+            width: 360px;
+            height: 100px;
+            margin: 0 auto;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        .login .formbox .line input {
+            width: 290px;
+            height: 80px;
+            padding: 14px 10px;
+            box-sizing: border-box;
+            border: 2px solid #0094C6;
+            border-radius: 40px;
+            outline: none;
+            text-align: center;
+            background: none;
+            font: bolder 20px "微软雅黑";
+            transition: 0.25s;
+        }
+
+        .login .formbox .line input:focus {
+            width: 340px;
+            height: 80px;
+            padding: 14px 10px;
+            box-sizing: border-box;
+            border-color: #06D6A0;
+            border-radius: 40px;
+            box-shadow: 0px 0px 15px #888888;
+            outline: none;
+            text-align: center;
+            background: none;
+        }
+
+        .login .formbox .line input[type="button"] {
+            width: 180px;
+            border-color: #06D6A0;
+            font: bolder 25px "微软雅黑";
+            color: #2d2d2d;
+        }
+
+        .login .formbox .line input[type="button"]:hover {
+            width: 180px;
+            border-color: #06D6A0;
+            background-color: #06D6A0;
+            box-shadow: 5px 5px 5px #888888;
+            color: white;
+        }
+
+        .login .formbox .specialline {
+            width: 450px;
+            height: 100px;
+            padding: 14px 10px;
+            box-sizing: border-box;
+            position: relative;
+        }
+
+        .login .formbox .specialline input[type="button"] {
+            width: 160px;
+            height: 40px;
+            font: bolder 16px "微软雅黑";
+            box-sizing: border-box;
+            border: 2px solid #FF3E41;
+            color: #2d2d2d;
+            border-radius: 30px;
+            outline: none;
+            text-align: center;
+            transition: 0.25s;
+            background: none;
+        }
+
+        .login .formbox .specialline input[type="button"]:hover {
+            background-color: #FF3E41;
+            box-shadow: 5px 5px 5px #888888;
+            color: white;
+        }
+
+        .login .formbox .specialline .forgetpassword {
+            width: 80px;
+            height: 20px;
+            display: block;
+            position: absolute;
+            right: 10px;
+            bottom: 10px;
+        }
+
+        .login .formbox .specialline .forgetpassword a {
+            font-size: 14px;
+            text-decoration: none;
+            color: #8590a6;
+        }
+
+        .login .formbox .specialline .forgetpassword a:hover {
+            color: #2d2d2d;
+        }
+    </style>
+</head>
+
+<body>
+    <script src="https://cdn.jsdelivr.net/npm/bubbly-bg@0.2.3/dist/bubbly-bg.js"></script>
+    <script>bubbly();</script>
+    <div class="login">
+        <h1>日晷</h1>
+        <h3>立即登陆，开始规划你的生活</h3>
+        <div class="formbox">
+            <form>
+                <div class="line"><input id="username" type="text" placeholder="账号" maxlength="20"></div>
+                <div class="line"><input id="password" type="password" placeholder="密码" maxlength="16"></div>
+                <div class="line"><input type="button" value="登录" onclick="EleLogin()"></div>
+                <div class="specialline"><input type="button" value="没有账号？立即注册"><span class="forgetpassword"><a
+                            href="找回密码.html">忘记密码？</a></span></div>
+            </form>
+        </div>
+    </div>
+    <script>
+        var usernametxt = document.getElementById("username");
+        var passwordtxt = document.getElementById("password");
+        function EleLogin() {
+            var name = usernametxt.value;
+            var password = passwordtxt.value;
+            alert(name+password);
+        }
+    </script>
+</body>
+
+</html>

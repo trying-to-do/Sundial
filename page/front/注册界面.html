@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>注册</title>
+    <style>
+        body,
+        div,
+        dl,
+        dt,
+        dd,
+        ul,
+        ol,
+        li,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        pre,
+        code,
+        form,
+        fieldset,
+        legend,
+        input,
+        textarea,
+        p,
+        blockquote,
+        th,
+        td {
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            height: 110px;
+            background-color: #ffffff;
+            box-shadow: 0px 3px 10px rgba(0, 0, 0, .1);
+            padding: 0px 150px 0px 150px;
+        }
+
+        .header .logo {
+            line-height: 110px;
+            float: left;
+        }
+
+        .header .logo-title {
+            float: left;
+            font-size: 24px;
+            color: #333;
+            line-height: 110px;
+
+        }
+
+        .header .haveaccount {
+            float: right;
+            font: 16px "微软雅黑";
+            color: #999;
+            margin-top: 50px;
+        }
+
+        .header .haveaccount a {
+            text-decoration: none;
+            color: #0094C6;
+        }
+
+        .header .haveaccount a:hover {
+            text-decoration: underline;
+            color: #70a1ff;
+        }
+
+        .content {
+            width: 980px;
+            height: 600px;
+            margin: 0 auto;
+            padding: 60px 0px;
+            box-sizing: border-box;
+        }
+
+        .content form {
+            display: block;
+        }
+
+        .content form .line {
+            width: 460px;
+            height: 60px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+        }
+
+        .content form .line input {
+            margin: 0 auto;
+            box-sizing: border-box;
+            border: 1px solid #dcdfe6;
+            border-radius: 7px;
+            outline: none;
+            width: 100%;
+            font-size: 16px;
+            line-height: 60px;
+            padding: 0 10px;
+            transition: 0.25s;
+        }
+
+        .content form .line input:hover {
+            border: 1px solid #c0c4cc;
+        }
+
+        .content form .line input:focus {
+            border: 1px solid #0094C6;
+        }
+
+        .content form .line input[type="button"] {
+            margin: 0 auto;
+            width: 180px;
+            height: 50px;
+            font: bolder 16px "微软雅黑";
+            box-sizing: border-box;
+            border: 2px solid #0094C6;
+            color: #2d2d2d;
+            border-radius: 30px;
+            outline: none;
+            text-align: center;
+            transition: 0.25s;
+            background: none;
+        }
+
+        .content form .line input[type="button"]:hover {
+            width: 400px;
+            border-color: #0094C6;
+            background-color: #0094C6;
+            box-shadow: 5px 5px 5px #888888;
+            color: white;
+        }
+
+        .content form .line p {
+            position: absolute;
+            right: -160px;
+            top: 20px;
+            color: #FF3E41;
+            font-size: 13px;
+        }
+    </style>
+    <script>
+        // var Istel = /^1[3456789]\d{9}$/;
+        //验证用户名
+        function username_validate() {
+            var usn = document.getElementById("username");
+            // 判断空值
+            if (usn.value == "" || usn.value == null) {
+                document.getElementById("validate_username_txt").innerHTML = "用户名不能为空！";
+                usn.style.border = "1px solid #FF3E41";
+            }
+            else {
+                document.getElementById("validate_username_txt").innerHTML = "";
+                usn.style.border = "1px solid #dcdfe6";
+            }
+            //判断用户名是否合法
+
+        }
+        //验证密码
+        function password_validate() {
+            var psd = document.getElementById("password");
+            // 判断空值
+            if (psd.value == "" || psd.value == null) {
+                document.getElementById("validate_password_txt").innerHTML = "密码不能为空！";
+                psd.style.border = "1px solid #FF3E41";
+            }
+            else {
+                document.getElementById("validate_password_txt").innerHTML = "";
+                psd.style.border = "1px solid #dcdfe6";
+            }
+            //验证密码长度
+            if (psd.value.length < 6 || psd.value.length > 16) {
+                document.getElementById("validate_password_txt").innerHTML = "请输入6-16位的密码！";
+                psd.style.border = "1px solid #FF3E41";
+            }
+            else {
+                document.getElementById("validate_password_txt").innerHTML = "";
+                psd.style.border = "1px solid #dcdfe6";
+            }
+        }
+        //验证手机号
+        // function telphone_validate() {
+        //     if (Istel.test(document.getElementById("telphonenumber").value)) {
+        //         document.getElementById("validate_phone_txt").innerHTML = "请输入正确的手机号码";
+        //     }
+        // }
+    </script>
+</head>
+
+<body>
+    <!-- 头部 -->
+    <div class="header">
+        <img class="logo" src="">
+        <div class="logo-title">欢迎注册</div>
+        <div class="haveaccount">已有账号？<a href="#">立即登录</a></div>
+    </div>
+
+    <!-- 主体 -->
+    <div class="content">
+        <!-- 步骤框架 -->
+        <div class="stepbox">
+            <span class="step"></span>
+            <span class="step"></span>
+            <span class="step"></span>
+        </div>
+        <!-- 表单框架 -->
+        <form>
+            <div class="line">
+                <input type="text" name="username" id="username" placeholder="昵称" onblur="username_validate()" >
+                <p id="validate_username_txt"></p>
+            </div>
+            <div class="line"></div>
+            <div class="line">
+                <input type="password" name="password" id="password" placeholder="密码（6-16个字符组成，区分大小写）"
+                    onblur="password_validate()" maxlength="16">
+                <p id="validate_password_txt"></p>
+            </div>
+            <div class="line"></div>
+            <!-- <div class="line">
+                <input type="telphone" name="telphonenumber" id="telphonenumber" placeholder="手机号" maxlength="11"
+                    onblur="telphone_validate()">
+                <p id="validate_phone_txt"></p>
+            </div> -->
+            <div class="line"></div>
+            <div class="line"><input type="button" value="注册"></div>
+        </form>
+    </div>
+
+    <!-- 尾部 -->
+    <div class="foot"></div>
+</body>
+
+</html>
