@@ -158,7 +158,7 @@ zQuery.EventOperation = function () { zQuery.Operation.call(this); }
 zQuery.EventOperation.prototype = new zQuery.Operation();
 zQuery.EventOperation.prototype.eventFactory = new zQuery.EventFactory(); zQuery.re
 zQuery.EventOperation.prototype.eventRequestUrlSet = new zQuery.EventRequestUrlSet();
-zQuery.EventOperation.prototype.login = function (date, start, end, type, content, sucessCallback, failCallBack) {
+zQuery.EventOperation.prototype.create = function (date, start, end, type, content, sucessCallback, failCallBack) {
     var obj = this.eventFactory.getEventDataToCreate(date, start, end, type, content);
     this.requset.post(this.eventRequestUrlSet.CreateUrl, obj, sucessCallback, failCallBack);
 }

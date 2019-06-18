@@ -177,7 +177,24 @@
             }
             else {
                 document.getElementById("validate_password_txt").innerHTML = "";
-                psd.style.border = "1px solid #dcdfe6";
+                psd.style.border = "1px solid #06D6A0";
+            }
+        }
+        //确认密码
+        function password_check() {
+            var psd = document.getElementById("password");
+            var psdck = document.getElementById("passwordcheck");
+            if (psd.value == "" || psd.value == null) {
+                document.getElementById("validate_passwordcheck_txt").innerHTML = "请先输入密码！";
+                psdck.style.border = "1px solid #FF3E41";
+            }
+            else if (psd.value != psdck.value) {
+                document.getElementById("validate_passwordcheck_txt").innerHTML = "密码输入不一致！";
+                psdck.style.border = "1px solid #FF3E41";
+            }
+            else {
+                document.getElementById("validate_passwordcheck_txt").innerHTML = "";
+                psdck.style.border = "1px solid #06D6A0";
             }
         }
         //验证手机号
@@ -214,7 +231,9 @@
             <div class="line"></div>
             <div class="line">
                 <input type="password" name="password" id="password" placeholder="密码（6-16个字符组成，区分大小写）"
-                    onblur="password_validate()" maxlength="16">
+                    onblur="password_validate();if(document.getElementById('passwordcheck').value!=''||document.getElementById('passwordcheck').value!=null){
+                        password_check();
+                    }" maxlength="16">
                 <p id="validate_password_txt"></p>
             </div>
             <div class="line"></div>
@@ -223,6 +242,11 @@
                     onblur="telphone_validate()">
                 <p id="validate_phone_txt"></p>
             </div> -->
+            <div class="line">
+                <input type="password" name="passwordcheck" id="passwordcheck" placeholder="确认密码（请再次输入密码）"
+                   onblur="password_check()" maxlength="16">
+                <p id="validate_passwordcheck_txt"></p>
+            </div>
             <div class="line"></div>
             <div class="line"><input type="button" value="注册"></div>
         </form>

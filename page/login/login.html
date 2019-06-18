@@ -179,11 +179,12 @@
         <h3>立即登陆，开始规划你的生活</h3>
         <div class="formbox">
             <form>
-                <div class="line"><input id="username" type="text" placeholder="账号" maxlength="20"></div>
+                <div class="line"><input id="username" type="text" placeholder="用户名" maxlength="20"></div>
                 <div class="line"><input id="password" type="password" placeholder="密码" maxlength="16"></div>
                 <div class="line"><input type="button" value="登录" onclick="EleLogin()"></div>
-                <div class="specialline"><input type="button" value="没有账号？立即注册"><span class="forgetpassword"><a
-                            href="找回密码.html">忘记密码？</a></span></div>
+                <div class="specialline"><input type="button" value="没有账号？立即注册"
+                        onclick="javascript:window.location.href='../register/register.html'"><span
+                        class="forgetpassword"><a href="找回密码.html">忘记密码？</a></span></div>
             </form>
         </div>
     </div>
@@ -193,7 +194,16 @@
         function EleLogin() {
             var name = usernametxt.value;
             var password = passwordtxt.value;
-            alert(name+password);
+            // alert(name+password);
+            $('account').login(name, password, function (ret) {
+                var obj = JSON.parse(ret);
+                if (obj[0].status==0) {
+                    alert("登录成功，你好" + name);
+                }
+                else{
+                    alert(obj[0]);
+                }
+            })
         }
     </script>
 </body>
