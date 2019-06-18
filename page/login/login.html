@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="../POST.js"></script>
     <title>日晷 - 让生活变得精确</title>
     <style>
         body,
@@ -196,12 +197,11 @@
             var password = passwordtxt.value;
             // alert(name+password);
             $('account').login(name, password, function (ret) {
-                var obj = JSON.parse(ret);
-                if (obj[0].status==0) {
+                if (ret[0].status==0) {
                     alert("登录成功，你好" + name);
                 }
                 else{
-                    alert(obj[0]);
+                    alert(ret[0]);
                 }
             })
         }

@@ -2,6 +2,8 @@ var yearSelect = document.getElementById('year');
 var monthSelect = document.getElementById('month');
 var datesUl = document.getElementById('datesUl');
 var item = document.getElementById('item');
+var datevalue;
+var timemsg;
 //初始化
 function init() {
     for (var year = 2000; year <= 2100; year++) {    //初始化俩个选项卡
@@ -60,22 +62,22 @@ function showDates() {
 function createLi(text, parent) {
     var li = document.createElement('li');
     li.innerHTML = text;
-    // 创建日程事件*******************************************************************
-    // li.onclick = createItem();
     parent.appendChild(li);
 }
+
 //创建一个输入年月计算出这个月有几天的函数
 function getDatesOfMonth(year, month) {
     var d = new Date(year, month, 0);
     return d.getDate();
 }
-//左切换月份
-// function leftmonth() {
-//     var op = monthSelect.getElementsByTagName("option");
-//     monthSelect.value
-function createItem(){
-    var it=document.getElementById(item);
-    it.createElement("ul");
-    it.getElementsByTagName.appendChild(document.createTextNode("abc"));
-}
-// }
+
+datesUl.addEventListener("click", function (e) {
+    datevalue = e.target;
+    timemsg = yearSelect.value + "-" + monthSelect.value + "-" + datevalue.innerHTML;
+    console.log(timemsg);
+    $("event").get(timemsg, function (ret) {
+        if (ret[0].status == '0') {
+            alert(ret[1]);
+        }
+    }, function () { alert("1") })
+})

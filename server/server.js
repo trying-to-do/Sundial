@@ -20,14 +20,14 @@ var UserImformation = /** @class */ (function () {
     return UserImformation;
 }());
 // 本地服务器路径
-var serverPath = "E:/Code/Sundial";
+var serverPath = "F:/读书/web/Sundial";
 // 请求路径 ==> 函数 表
 var functionMap = new Map();
 var session = new mySession.Session();
 // 连接数据库
 var mysqlConnection = mysql.createConnection({
     host: 'localhost',
-    user: 'codeRanger',
+    user: 'root',
     password: '123456',
     database: 'rigui'
 });
@@ -78,7 +78,7 @@ http.createServer(function (request, response) {
             });
             // 报文接收完毕
             request.on("end", function () {
-                console.log(postBody_1);
+                // console.log(userImformation);
                 var jsonObj = JSON.parse(postBody_1);
                 value(response, jsonObj, userImformation);
             });
@@ -262,8 +262,9 @@ function accountGet(response, jsonObj, userImformation) {
 function eventGet(response, jsonObj, userImformation) {
     var sql = "select * " +
         "from event " +
-        "where event.ownerid=? and eventdate=?";
-    var values = [userImformation.id, jsonObj.date];
+        "where ownerid=? and date=?";
+    var values = [1, '2019-06-28'];
+    console.log(jsonObj.date);
     var returnStr = "";
     mysqlConnection.query(sql, values, function (error, results, fields) {
         if (error) {
@@ -271,6 +272,9 @@ function eventGet(response, jsonObj, userImformation) {
         }
         else if (results.length == 0) {
             returnStr = queryArrayToJsonStr(results);
+            // console.log(userImformation.id);
+            // console.log(jsonObj.date);
+            console.log(returnStr);
             response.end(returnStr);
         }
     });

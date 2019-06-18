@@ -28,7 +28,7 @@ zQuery.Requset.prototype.post = function (url, data, sucessCallback, failCallBac
     xhr.onreadystatechange = function (ev) {
         if (this.readyState === 4) {
             if (this.status >= 200 && this.status < 300 || this.status === 304) {
-                sucessCallback(this.responseText);
+                sucessCallback(JSON.parse(this.responseText));
             }
             else {
                 failCallBack(this.status);
@@ -128,8 +128,10 @@ zQuery.EventFactory.prototype.getEventDataToDelete = function (id) {
     obj.id = id;
     return obj;
 }
-zQuery.EventFactory.prototype.getEventDataToGet = function () {
-    return new zQuery.EventData();
+zQuery.EventFactory.prototype.getEventDataToGet = function (date) {
+    var obj= new zQuery.EventData();
+    obj.date=date;
+    return obj;
 }
 
 zQuery.Operation = function () { }
@@ -166,8 +168,8 @@ zQuery.EventOperation.prototype.delete = function (id, sucessCallback, failCallB
     var obj = this.eventFactory.getEventDataToDelete(id);
     this.requset.post(this.eventRequestUrlSet.DeleteUrl, obj, sucessCallback, failCallBack);
 }
-zQuery.EventOperation.prototype.get = function (sucessCallback, failCallBack) {
-    var obj = this.eventFactory.getEventDataToGet();
+zQuery.EventOperation.prototype.get = function (date,sucessCallback, failCallBack) {
+    var obj = this.eventFactory.getEventDataToGet(date);
     this.requset.post(this.eventRequestUrlSet.GetUrl, obj, sucessCallback, failCallBack);
 }
 
