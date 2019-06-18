@@ -78,7 +78,7 @@ http.createServer(function (request, response) {
             });
             // 报文接收完毕
             request.on("end", function () {
-                // console.log(userImformation);
+                console.log(postBody_1);
                 var jsonObj = JSON.parse(postBody_1);
                 value(response, jsonObj, userImformation);
             });
@@ -263,18 +263,22 @@ function eventGet(response, jsonObj, userImformation) {
     var sql = "select * " +
         "from event " +
         "where ownerid=? and date=?";
-    var values = [1, '2019-06-28'];
-    console.log(jsonObj.date);
+    var values = [userImformation.id, jsonObj.date];
+    // console.log(jsonObj.date);
     var returnStr = "";
     mysqlConnection.query(sql, values, function (error, results, fields) {
         if (error) {
             printException(error);
         }
-        else if (results.length == 0) {
+        else if (results.length != 0) {
             returnStr = queryArrayToJsonStr(results);
             // console.log(userImformation.id);
             // console.log(jsonObj.date);
-            console.log(returnStr);
+            // console.log(returnStr);
+            response.end(returnStr);
+        }
+        else {
+            returnStr = "[" + makeJsonStr(["status", "0"]) + "]";
             response.end(returnStr);
         }
     });
@@ -296,6 +300,7 @@ function eventCreate(response, jsonObj, userImformation) {
     var sql = 'insert into event (date, start, end, type, content, ownerid) ' +
         "values(?,?,?,?,?,?);";
     var values = [jsonObj.date, jsonObj.start, jsonObj.end, jsonObj.type, jsonObj.content, userImformation.id];
+    var returnStr;
     mysqlConnection.query(sql, values);
     returnStr = "[" + makeJsonStr(["status", "0"]) + "]";
     response.end(returnStr);

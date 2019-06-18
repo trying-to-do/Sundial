@@ -2,6 +2,7 @@ var yearSelect = document.getElementById('year');
 var monthSelect = document.getElementById('month');
 var datesUl = document.getElementById('datesUl');
 var item = document.getElementById('item');
+var prevButtionDate;
 var datevalue;
 var timemsg;
 //初始化
@@ -72,12 +73,57 @@ function getDatesOfMonth(year, month) {
 }
 
 datesUl.addEventListener("click", function (e) {
+    var nodetr = document.createElement("tr");
+    var nodetd = document.createElement("td");
     datevalue = e.target;
     timemsg = yearSelect.value + "-" + monthSelect.value + "-" + datevalue.innerHTML;
-    console.log(timemsg);
+    prevButtionDate = timemsg;
+    // console.log(timemsg);
     $("event").get(timemsg, function (ret) {
-        if (ret[0].status == '0') {
-            alert(ret[1]);
+        var itemtable = document.getElementById("itemtable");
+        while (itemtable.children.length > 1) {
+            itemtable.removeChild(itemtable.children[itemtable.children.length - 1]);
         }
-    }, function () { alert("1") })
-})
+        if (ret[0].status == '0' && ret.length > 1) {
+            var tds = [];
+            var tr;
+            var eventDate;
+            for (var i = 1; i < ret.length; ++i) {
+                eventDate = new Date(ret[i].date);
+                tr = document.createElement('tr');
+                tds = [];
+                tds.push(document.createElement('td'));
+                tds.push(document.createElement('td'));
+                tds.push(document.createElement('td'));
+                tds[0].innerHTML = ret[i].id;
+                tds[1].innerHTML = eventDate.toLocaleDateString() + ":" + ret[i].start + '~~' + ret[i].end;
+                tds[2].innerHTML = ret[i].content;
+                tr.appendChild(tds[0]);
+                tr.appendChild(tds[1]);
+                tr.appendChild(tds[2]);
+                itemtable.appendChild(tr);
+            }
+            // nodetd.appendChild(document.createTextNode(1));
+            // nodetr.appendChild(nodetd);
+            // nodetr.appendChild(nodetd);
+            // document.getElementById("itemtable").appendChild(nodetr);
+        }
+    }, function () { alert("连接错误"); })
+});
+
+
+// function createEvent() {
+//     var startTime = document.getElementById('txtstarttime').value;
+//     var endTime = document.getElementById('txtendtime').value;
+//     var content = document.getElementById('txtcontent').value;
+//     $('event').create(prevButtionDate, startTime, endTime, 0, content, 
+//         function(ret) {
+//             if (ret[0].status == '0') {
+//                 alert('sucess');
+//             }
+//             else {
+//                 alert('fail');
+//             }
+//         }
+//     , null)
+// }

@@ -7,6 +7,23 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>主界面</title>
     <script src="../POST.js"></script>
+    <script>
+        function mCreateEvent() {
+            var startTime = document.getElementById('txtstarttime').value;
+            var endTime = document.getElementById('txtendtime').value;
+            var content = document.getElementById('txtcontent').value;
+            $('event').create(prevButtionDate, startTime, endTime, 0, content,
+                function (ret) {
+                    if (ret[0].status == '0') {
+                        alert('sucess');
+                    }
+                    else {
+                        alert('fail');
+                    }
+                }
+                , null)
+        }
+    </script>
     <style>
         body,
         div,
@@ -86,7 +103,7 @@
 
         .item {
             margin: 0 auto;
-            width: 700px;
+            width: 750px;
             height: 300px;
         }
 
@@ -95,14 +112,41 @@
         }
 
         .item .operatbox {
-            width: 220px;
+            width: 300px;
             float: right;
         }
-        .item .operatbox input[type="button"]{
-            float: right;
-            margin: 10px 20px;
+
+        .item .operatbox .txt .txtbox {
+            width: 300px;
+            margin: 5px 5px;
         }
-        
+
+        .item .operatbox .txt .txtbox input {
+            width: 205px;
+            float: right;
+        }
+
+        .item .operatbox .txt .specialtxtbox {
+            width: 300px;
+            height: 160px;
+            margin: 5px 5px;
+        }
+
+        .item .operatbox .txt .specialtxtbox textarea {
+            float: right;
+            resize: none;
+            font: 14px "宋体";
+        }
+        .item .operatbox .btn{
+            width: 210px;
+            margin: 0 auto;
+            float: right;
+        }
+        .item .operatbox .btn input[type="button"]{
+            width: 50px;
+            height: 30px;
+            margin:0 5px;
+        }
     </style>
     <!-- <script src="mainPage.js">
     </script> -->
@@ -131,21 +175,32 @@
         <ul id="datesUl" class="datesUl"></ul>
     </div>
     <div class="item" id="item">
-        <table class="itemtable" id="itemtable" height="120px" width="400px" border="1px">
+        <table class="itemtable" id="itemtable" height="60px" width="400px" border="1px">
             <tr>
+                <th>事件编号</th>
                 <th>时间</th>
                 <th>内容</th>
             </tr>
-            <tr>
-                <td></td>
-                <td></td>
-            </tr>
         </table>
         <div id="operate" class="operatbox">
-            时间：<input type="text" id="txtcontent">
-            内容：<input type="text" id="txttime">
-            <div class="btn"><input type="button" value="插入"><input type="button" value="删除"><input type="button"
-                    value="修改"></div>
+            <div class="txt">
+                <div class="txtbox">
+                    <label>编号：</label><input type="text" id="txtid">
+                </div>
+                <div class="txtbox">
+                    <label>开始时间：</label><input type="text" id="txtstarttime">
+                </div>
+                <div class="txtbox">
+                    <label>结束时间：</label><input type="text" id="txtendtime">
+                </div>
+                <div class="specialtxtbox">
+                    <label>内容：</label><textarea id="txtcontent" rows="10" cols="27"></textarea>
+                </div>
+            </div>
+            <div class="btn"><input type="button" value="插入" onclick="mCreateEvent()">
+                <input type="button" value="删除">
+                <input type="button" value="修改">
+            </div>
         </div>
     </div>
     <script src="mainPage.js">
