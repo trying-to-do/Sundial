@@ -13,9 +13,10 @@ var mysql = require("mysql");
 var queryString = require("querystring");
 var mySession = require("./jEasySession");
 var UserImformation = /** @class */ (function () {
-    function UserImformation(id, name) {
+    function UserImformation(id, name, passWord) {
         this.id = id;
         this.name = name;
+        this.passWord = passWord;
     }
     return UserImformation;
 }());
@@ -43,8 +44,10 @@ mysqlConnection.connect(function (error, result) {
 functionMap.set('/account/login', accountLogin);
 functionMap.set('/account/register', accountRegister);
 functionMap.set('/account/get', accountGet);
+functionMap.set('/account/isExists', accountisExists);
 functionMap.set('/event/get', eventGet);
 functionMap.set('/event/create', eventCreate);
+functionMap.set('/event/delete', eventDelete);
 
 // 创建服务器
 http.createServer(function (request, response) {
@@ -69,7 +72,7 @@ http.createServer(function (request, response) {
                 if (cookieOjbect.id && session.isExists(cookieOjbect.id.toString())) {
                     // 获取已经启动会话的用户的id和name
                     var obj = session.getValue(cookieOjbect.id.toString());
-                    userImformation = new UserImformation(obj.id, obj.name);
+                    userImformation = new UserImformation(obj.id, obj.name, obj.passWord);
                 }
             }
             // 接收报文
@@ -157,9 +160,9 @@ function printException(error) {
 }
 
 //创建账户
-function accountRegister(require, jsonObj) {
+function accountRegister(response, jsonObj) {
     var sql = "select idAccount " + "from account " + "where Username=?";
-    var value = [jsonObj.name];
+    var values = [jsonObj.name];
     var returnStr = "";
     //查找用户名是否存在
     mysqlConnection.query(sql, values, function (error, results, fields) {
@@ -196,6 +199,27 @@ function accountRegister(require, jsonObj) {
     })
 }
 
+//创建账户
+function accountisExists(response, jsonObj) {
+    var sql = "select id " + "from account " + "where name=?";
+    var values = [jsonObj.name];
+    var returnStr = "";
+    //查找用户名是否存在
+    mysqlConnection.query(sql, values, function (error, results, fields) {
+        if (error) {
+            printException(error);
+        }
+        else if (results.length == 0) {
+            returnStr = "[" + makeJsonStr(["status", "0"]) + "]";
+            response.end(returnStr);
+        }
+        else {
+            returnStr = "[" + makeJsonStr(["status", "1", 'message', 'user is exists!']) + "]";
+            response.end(returnStr);
+        }
+    })
+}
+
 //用户登录
 function accountLogin(response, jsonObj, userImformation) {
     var sql = "select * " +
@@ -203,12 +227,12 @@ function accountLogin(response, jsonObj, userImformation) {
         "where name=? and password=?;";
     var values = [jsonObj.name, jsonObj.password];
     var returnStr = "";
-    if (!!userImformation) {
+    if ((!!userImformation) && (UserImformation.name == jsonObj.name && userImformation.passWord == jsonObj.password)) {
         returnStr = "[" + makeJsonStr(["status", "0"]) + "]";
         response.end(returnStr);
     }
     else {
-        // 查询用户名和密码是否存在且匹配
+        // 查询用户名和密码是否存在且匹配=
         mysqlConnection.query(sql, values, function (error, results, fields) {
             if (error) {
                 printException(error);
@@ -221,7 +245,7 @@ function accountLogin(response, jsonObj, userImformation) {
             // 查询到匹配的用户名和密码
             else {
                 // 新建一个会话，会话内保存用户id和name
-                var id = "id=" + session.createSessionHandle(new UserImformation(results[0].id, results[0].name));
+                var id = "id=" + session.createSessionHandle(new UserImformation(results[0].id, results[0].name, results[0].password));
                 // 设置响应头cookie，cookie信息为会话ID
                 response.writeHead(200, {
                     "Content-Type": "text/plain",

@@ -73,8 +73,8 @@ function getDatesOfMonth(year, month) {
 }
 
 datesUl.addEventListener("click", function (e) {
-    var nodetr = document.createElement("tr");
-    var nodetd = document.createElement("td");
+    // var nodetr = document.createElement("tr");
+    // var nodetd = document.createElement("td");
     datevalue = e.target;
     timemsg = yearSelect.value + "-" + monthSelect.value + "-" + datevalue.innerHTML;
     prevButtionDate = timemsg;

@@ -10,6 +10,7 @@ zQuery.AccountRequestUrlSet.prototype = new zQuery.RequestUrlSet();
 zQuery.AccountRequestUrlSet.prototype.LoginUrl = zQuery.AccountRequestUrlSet.prototype.ServerRootPath + '/account/login';
 zQuery.AccountRequestUrlSet.prototype.RegisterUrl = zQuery.AccountRequestUrlSet.prototype.ServerRootPath + '/account/register';
 zQuery.AccountRequestUrlSet.prototype.GetUrl = zQuery.AccountRequestUrlSet.prototype.ServerRootPath + '/account/get';
+zQuery.AccountRequestUrlSet.prototype.isExistsUrl = zQuery.AccountRequestUrlSet.prototype.ServerRootPath + '/account/isExists';
 
 zQuery.EventRequestUrlSet = function () { zQuery.RequestUrlSet.call(this); }
 
@@ -79,6 +80,7 @@ zQuery.EventData.prototype.type = 'null';
 zQuery.EventData.prototype.content = 'null';
 zQuery.EventData.prototype.toJsonStr = function () {
     return JSON.stringify({
+        id: this.id,
         eventid: this.eventId,
         ownerid: this.ownerId,
         date: this.date,
@@ -111,6 +113,11 @@ zQuery.AccountFactory.prototype.getAccountDataToRegister = function (name, passW
 zQuery.AccountFactory.prototype.getAccountDataToGet = function () {
     return new zQuery.AccountData();
 }
+zQuery.AccountFactory.prototype.getAccountDataToisExists = function (name) {
+    var obj = new zQuery.AccountData();
+    obj.name = name;
+    return obj;
+}
 
 zQuery.EventFactory = function () { zQuery.Factory.call(this); }
 zQuery.EventFactory.prototype = new zQuery.Factory();
@@ -129,8 +136,8 @@ zQuery.EventFactory.prototype.getEventDataToDelete = function (id) {
     return obj;
 }
 zQuery.EventFactory.prototype.getEventDataToGet = function (date) {
-    var obj= new zQuery.EventData();
-    obj.date=date;
+    var obj = new zQuery.EventData();
+    obj.date = date;
     return obj;
 }
 
@@ -155,7 +162,10 @@ zQuery.AccountOperation.prototype.register = function (name, passWord, age, leve
     var obj = this.accountFactory.getAccountDataToLogin(name, passWord, age, level, status);
     this.requset.post(this.accountRequestUrlSet.RegisterUrl, obj, sucessCallback, failCallBack);
 }
-
+zQuery.AccountOperation.prototype.isExists = function (name, sucessCallback, failCallBack) {
+    var obj = this.accountFactory.getAccountDataToisExists(name);
+    this.requset.post(this.accountRequestUrlSet.isExistsUrl, obj, sucessCallback, failCallBack);
+}
 zQuery.EventOperation = function () { zQuery.Operation.call(this); }
 zQuery.EventOperation.prototype = new zQuery.Operation();
 zQuery.EventOperation.prototype.eventFactory = new zQuery.EventFactory(); zQuery.re
@@ -168,7 +178,7 @@ zQuery.EventOperation.prototype.delete = function (id, sucessCallback, failCallB
     var obj = this.eventFactory.getEventDataToDelete(id);
     this.requset.post(this.eventRequestUrlSet.DeleteUrl, obj, sucessCallback, failCallBack);
 }
-zQuery.EventOperation.prototype.get = function (date,sucessCallback, failCallBack) {
+zQuery.EventOperation.prototype.get = function (date, sucessCallback, failCallBack) {
     var obj = this.eventFactory.getEventDataToGet(date);
     this.requset.post(this.eventRequestUrlSet.GetUrl, obj, sucessCallback, failCallBack);
 }

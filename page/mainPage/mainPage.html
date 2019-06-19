@@ -12,16 +12,51 @@
             var startTime = document.getElementById('txtstarttime').value;
             var endTime = document.getElementById('txtendtime').value;
             var content = document.getElementById('txtcontent').value;
-            $('event').create(prevButtionDate, startTime, endTime, 0, content,
-                function (ret) {
-                    if (ret[0].status == '0') {
-                        alert('sucess');
+            if (prevButtionDate == undefined) {
+                alert("请先选择日期");
+            }
+            else if (content == null || content == "") {
+                alert("请输入内容");
+            }
+            else if (startTime > endTime) {
+                alert("结束时间必须晚于开始时间！");
+                startTime = "";
+                endTime = "";
+            }
+            else {
+                $('event').create(prevButtionDate, startTime, endTime, 0, content,
+                    function (ret) {
+                        if (ret[0].status == '0') {
+                            alert('成功插入');
+                        }
+                        else {
+                            alert('插入失败');
+                        }
                     }
-                    else {
-                        alert('fail');
-                    }
+                    , null)
+            }
+        }
+        function mDeleteEvent() {
+            var eventid = document.getElementById('txtid').value;
+            $('event').delete(eventid, function (ret) {
+                if (ret[0].status == '0') {
+                    alert('成功删除');
                 }
+                else {
+                    alert('删除失败');
+                }
+            }
                 , null)
+        }
+        function getUsermessage(){
+            $('account').get(function(ret){
+                if (ret[0].status == '0') {
+                    alert("成功");
+                }
+                else {
+                    alert('失败');
+                }
+            })
         }
     </script>
     <style>
@@ -103,12 +138,14 @@
 
         .item {
             margin: 0 auto;
-            width: 750px;
+            width: 1000px;
             height: 300px;
         }
 
         .item .itemtable {
+            width: 600px;
             float: left;
+            text-align: center;
         }
 
         .item .operatbox {
@@ -137,15 +174,17 @@
             resize: none;
             font: 14px "宋体";
         }
-        .item .operatbox .btn{
+
+        .item .operatbox .btn {
             width: 210px;
             margin: 0 auto;
             float: right;
         }
-        .item .operatbox .btn input[type="button"]{
+
+        .item .operatbox .btn input[type="button"] {
             width: 50px;
             height: 30px;
-            margin:0 5px;
+            margin: 0 5px;
         }
     </style>
     <!-- <script src="mainPage.js">
@@ -154,7 +193,7 @@
 
 <body>
     <div id="Usermessage" class="Usermessage_style">
-        <p id="msg">你好，leaf</p>
+        <p id="msg" onload="getUsermessage()"></p>
     </div>
     <div id="calendar" class="calendar">
         <div id="month_year" class="selecthead">
@@ -176,10 +215,10 @@
     </div>
     <div class="item" id="item">
         <table class="itemtable" id="itemtable" height="60px" width="400px" border="1px">
-            <tr>
-                <th>事件编号</th>
-                <th>时间</th>
-                <th>内容</th>
+            <tr height="80px">
+                <th width="50px">事件编号</th>
+                <th width="300px">时间</th>
+                <th width="300px">内容</th>
             </tr>
         </table>
         <div id="operate" class="operatbox">
@@ -198,8 +237,7 @@
                 </div>
             </div>
             <div class="btn"><input type="button" value="插入" onclick="mCreateEvent()">
-                <input type="button" value="删除">
-                <input type="button" value="修改">
+                <input type="button" value="删除" onclick="mDeleteEvent()">
             </div>
         </div>
     </div>

@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>注册</title>
+    <script src="../POST.js"></script>
     <style>
         body,
         div,
@@ -146,7 +147,8 @@
         }
     </style>
     <script>
-        // var Istel = /^1[3456789]\d{9}$/;
+        var flagUser = false;
+        var flagPassword = false;
         //验证用户名
         function username_validate() {
             var usn = document.getElementById("username");
@@ -156,12 +158,26 @@
                 usn.style.border = "1px solid #FF3E41";
             }
             else {
-                document.getElementById("validate_username_txt").innerHTML = "";
-                usn.style.border = "1px solid #dcdfe6";
+                $('account').isExists(usn.value, function (ret) {
+                    if (ret[0].status == 0) {
+                        alert("1");
+                        document.getElementById("validate_username_txt").innerHTML = "";
+                        usn.style.border = "1px solid #dcdfe6";
+                        flagUser = true;
+                    }
+                    else {
+                        alert("0");
+                        document.getElementById("validate_username_txt").innerHTML = "用户名已存在！";
+                        usn.style.border = "1px solid #FF3E41";
+                    }
+                }, null)
             }
-            //判断用户名是否合法
-
+            // else {
+            // document.getElementById("validate_username_txt").innerHTML = "";
+            // usn.style.border = "1px solid #dcdfe6";
+            // flagUser = true;
         }
+            //判断用户名是否合法
         //验证密码
         function password_validate() {
             var psd = document.getElementById("password");
@@ -192,11 +208,21 @@
                 document.getElementById("validate_passwordcheck_txt").innerHTML = "密码输入不一致！";
                 psdck.style.border = "1px solid #FF3E41";
             }
+            else if (psd.value.length < 6 || psd.value.length > 16) {
+                document.getElementById("validate_passwordcheck_txt").innerHTML = "请输入合法的密码值！";
+                psdck.style.border = "1px solid #FF3E41";
+            }
             else {
                 document.getElementById("validate_passwordcheck_txt").innerHTML = "";
                 psdck.style.border = "1px solid #06D6A0";
+                flagPassword = true;
             }
         }
+        // function signUp(){
+        //     if(flagPassword==true&&flagUser==true){
+        //         $('account').register
+        //     }
+        // }
         //验证手机号
         // function telphone_validate() {
         //     if (Istel.test(document.getElementById("telphonenumber").value)) {
@@ -211,7 +237,7 @@
     <div class="header">
         <img class="logo" src="">
         <div class="logo-title">欢迎注册</div>
-        <div class="haveaccount">已有账号？<a href="#">立即登录</a></div>
+        <div class="haveaccount">已有账号？<a href="../login/login.html">立即登录</a></div>
     </div>
 
     <!-- 主体 -->
@@ -230,8 +256,7 @@
             </div>
             <div class="line"></div>
             <div class="line">
-                <input type="password" name="password" id="password" placeholder="密码（6-16个字符组成，区分大小写）"
-                    onblur="password_validate();if(document.getElementById('passwordcheck').value!=''||document.getElementById('passwordcheck').value!=null){
+                <input type="password" name="password" id="password" placeholder="密码（6-16个字符组成，区分大小写）" onblur="password_validate();if(document.getElementById('passwordcheck').value!=''||document.getElementById('passwordcheck').value!=null){
                         password_check();
                     }" maxlength="16">
                 <p id="validate_password_txt"></p>
@@ -244,7 +269,7 @@
             </div> -->
             <div class="line">
                 <input type="password" name="passwordcheck" id="passwordcheck" placeholder="确认密码（请再次输入密码）"
-                   onblur="password_check()" maxlength="16">
+                    onblur="password_check()" maxlength="16">
                 <p id="validate_passwordcheck_txt"></p>
             </div>
             <div class="line"></div>
