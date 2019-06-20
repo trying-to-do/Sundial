@@ -19,7 +19,7 @@ zQuery.EventRequestUrlSet.prototype.CreateUrl = zQuery.EventRequestUrlSet.protot
 zQuery.EventRequestUrlSet.prototype.GetUrl = zQuery.EventRequestUrlSet.prototype.ServerRootPath + '/event/get';
 zQuery.EventRequestUrlSet.prototype.DeleteUrl = zQuery.EventRequestUrlSet.prototype.ServerRootPath + '/event/delete';
 
-zQuery.Requset = function () { }
+zQuery.Requset = function () {}
 
 zQuery.Requset.prototype.post = function (url, data, sucessCallback, failCallBack) {
     let xhr = new XMLHttpRequest();

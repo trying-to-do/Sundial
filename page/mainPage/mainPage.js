@@ -96,7 +96,8 @@ datesUl.addEventListener("click", function (e) {
                 tds.push(document.createElement('td'));
                 tds.push(document.createElement('td'));
                 tds[0].innerHTML = ret[i].id;
-                tds[1].innerHTML = eventDate.toLocaleDateString() + ":" + ret[i].start + '~~' + ret[i].end;
+                tds[1].innerHTML = eventDate.toLocaleDateString() + ":" 
+                + ret[i].start + '~~' + ret[i].end;
                 tds[2].innerHTML = ret[i].content;
                 tr.appendChild(tds[0]);
                 tr.appendChild(tds[1]);

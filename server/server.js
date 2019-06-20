@@ -21,7 +21,7 @@ var UserImformation = /** @class */ (function () {
     return UserImformation;
 }());
 // 本地服务器路径
-var serverPath = "F:/读书/web/Sundial";
+var serverPath = "F:/读书/web/日晷/Sundial";
 // 请求路径 ==> 函数 表
 var functionMap = new Map();
 var session = new mySession.Session();
@@ -59,15 +59,17 @@ http.createServer(function (request, response) {
     try {
         // 如果访问服务器根目录
         if (targetPath == "/") {
-            response.end("server is running at http://localhost:8000");
+            response.end("server is running at http://localhost:8123");
         }
         // 如果本次访问不是请求文件
         else if (util.isFunction(value)) {
             var postBody_1 = '';
             // 如果请求头含有cookie
             if (request.headers.cookie) {
+                // console.log(request.headers.cookie);
                 // 转化cookie为对象
-                var cookieOjbect = queryString.parse(request.headers.cookie, ';', '=');
+                var cookieOjbect = queryString.parse(request.headers.cookie, '; ', '=');
+                // console.log(cookieOjbect);
                 // 检测会话状态是否存在
                 if (cookieOjbect.id && session.isExists(cookieOjbect.id.toString())) {
                     // 获取已经启动会话的用户的id和name
@@ -81,7 +83,7 @@ http.createServer(function (request, response) {
             });
             // 报文接收完毕
             request.on("end", function () {
-                console.log(postBody_1);
+                // console.log(postBody_1);
                 var jsonObj = JSON.parse(postBody_1);
                 value(response, jsonObj, userImformation);
             });
