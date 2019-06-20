@@ -149,10 +149,13 @@
     <script>
         var flagUser = false;
         var flagPassword = false;
+        var usn = document.getElementById("username");
+        var psd = document.getElementById("password");
+        var psdck = document.getElementById("passwordcheck");
         //验证用户名
         function username_validate() {
-            var usn = document.getElementById("username");
             // 判断空值
+            var usn = document.getElementById("username");
             if (usn.value == "" || usn.value == null) {
                 document.getElementById("validate_username_txt").innerHTML = "用户名不能为空！";
                 usn.style.border = "1px solid #FF3E41";
@@ -160,13 +163,11 @@
             else {
                 $('account').isExists(usn.value, function (ret) {
                     if (ret[0].status == 0) {
-                        alert("1");
                         document.getElementById("validate_username_txt").innerHTML = "";
-                        usn.style.border = "1px solid #dcdfe6";
+                        usn.style.border = "1px solid #06D6A0";
                         flagUser = true;
                     }
                     else {
-                        alert("0");
                         document.getElementById("validate_username_txt").innerHTML = "用户名已存在！";
                         usn.style.border = "1px solid #FF3E41";
                     }
@@ -177,11 +178,11 @@
             // usn.style.border = "1px solid #dcdfe6";
             // flagUser = true;
         }
-            //判断用户名是否合法
+        //判断用户名是否合法
         //验证密码
         function password_validate() {
-            var psd = document.getElementById("password");
             // 判断空值
+            var psd = document.getElementById("password");
             if (psd.value == "" || psd.value == null) {
                 document.getElementById("validate_password_txt").innerHTML = "密码不能为空！";
                 psd.style.border = "1px solid #FF3E41";
@@ -218,11 +219,28 @@
                 flagPassword = true;
             }
         }
-        // function signUp(){
-        //     if(flagPassword==true&&flagUser==true){
-        //         $('account').register
-        //     }
-        // }
+        function signUp() {
+            var usn = document.getElementById("username");
+            var psd = document.getElementById("password");
+            var psdck = document.getElementById("passwordcheck");
+            if (flagPassword == true && flagUser == true) {
+                $('account').register(usn.value, psdck.value, 0, 1, "", function (ret) {
+                    if (ret[0].status == 0) {
+                        alert("注册成功，立即登录吧");
+                        window.location.href = '../login/login.html';
+                    }
+                    else {
+                        alert("注册失败！");
+                    }
+                })
+            }
+            else if(usn.value==""||psd.value==""||psdck.value==""){
+                alert("请完善用户信息！");
+            }
+            else{
+                alert("请按提示填写正确的用户信息！");
+            }
+        }
         //验证手机号
         // function telphone_validate() {
         //     if (Istel.test(document.getElementById("telphonenumber").value)) {
@@ -251,7 +269,8 @@
         <!-- 表单框架 -->
         <form>
             <div class="line">
-                <input type="text" name="username" id="username" placeholder="昵称" onblur="username_validate()">
+                <input type="text" name="username" id="username" placeholder="昵称" onblur="username_validate()"
+                    maxlength="16">
                 <p id="validate_username_txt"></p>
             </div>
             <div class="line"></div>
@@ -273,7 +292,7 @@
                 <p id="validate_passwordcheck_txt"></p>
             </div>
             <div class="line"></div>
-            <div class="line"><input type="button" value="注册"></div>
+            <div class="line"><input type="button" value="注册" onclick="signUp()"></div>
         </form>
     </div>
 

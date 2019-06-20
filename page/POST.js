@@ -2,7 +2,7 @@ var zQuery = window.zQuery || {};
 
 zQuery.RequestUrlSet = function () { }
 
-zQuery.RequestUrlSet.prototype.ServerRootPath = 'http://localhost:8000';
+zQuery.RequestUrlSet.prototype.ServerRootPath = 'http://localhost:8123';
 
 zQuery.AccountRequestUrlSet = function () { zQuery.RequestUrlSet.call(this); }
 
@@ -155,11 +155,11 @@ zQuery.AccountOperation.prototype.login = function (name, passWord, sucessCallba
     this.requset.post(this.accountRequestUrlSet.LoginUrl, obj, sucessCallback, failCallBack);
 }
 zQuery.AccountOperation.prototype.get = function (sucessCallback, failCallBack) {
-    var obj = this.accountFactory.getAccountDataToLogin();
+    var obj = this.accountFactory.getAccountDataToGet();
     this.requset.post(this.accountRequestUrlSet.GetUrl, obj, sucessCallback, failCallBack);
 }
 zQuery.AccountOperation.prototype.register = function (name, passWord, age, level, status, sucessCallback, failCallBack) {
-    var obj = this.accountFactory.getAccountDataToLogin(name, passWord, age, level, status);
+    var obj = this.accountFactory.getAccountDataToRegister(name, passWord, age, level, status);
     this.requset.post(this.accountRequestUrlSet.RegisterUrl, obj, sucessCallback, failCallBack);
 }
 zQuery.AccountOperation.prototype.isExists = function (name, sucessCallback, failCallBack) {

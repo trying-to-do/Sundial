@@ -52,6 +52,7 @@
             $('account').get(function(ret){
                 if (ret[0].status == '0') {
                     alert("成功");
+                    document.getElementById("getUsermessage").innerHTML='您好';
                 }
                 else {
                     alert('失败');

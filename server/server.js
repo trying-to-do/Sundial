@@ -97,7 +97,7 @@ http.createServer(function (request, response) {
     catch (error) {
         printException(error);
     }
-}).listen(8000);
+}).listen(8123);
 
 // 属性拼接函数
 function propertiesSplicing(postBody) {
@@ -161,7 +161,7 @@ function printException(error) {
 
 //创建账户
 function accountRegister(response, jsonObj) {
-    var sql = "select idAccount " + "from account " + "where Username=?";
+    var sql = "select id " + "from account " + "where name=?";
     var values = [jsonObj.name];
     var returnStr = "";
     //查找用户名是否存在
@@ -199,7 +199,7 @@ function accountRegister(response, jsonObj) {
     })
 }
 
-//创建账户
+//用户名验证
 function accountisExists(response, jsonObj) {
     var sql = "select id " + "from account " + "where name=?";
     var values = [jsonObj.name];

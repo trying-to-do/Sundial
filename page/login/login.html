@@ -201,8 +201,14 @@
                     alert("登录成功，你好" + name);
                     window.location.href = '../mainPage/mainPage.html'
                 }
+                else if(usernametxt.value.length==0){
+                    alert("请输入用户名！");
+                }
+                else if(passwordtxt.value.length==0){
+                    alert("请输入密码！");
+                }
                 else{
-                    alert("用户名或密码错误");
+                    alert("用户名或密码错误！");
                 }
             })
         }
