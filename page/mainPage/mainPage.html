@@ -51,13 +51,12 @@
         function getUsermessage(){
             $('account').get(function(ret){
                 if (ret[0].status == '0') {
-                    alert("成功");
-                    document.getElementById("getUsermessage").innerHTML='您好';
+                    document.getElementById("msg").innerHTML='您好,'+ret[1].name+"&nbsp;&nbsp;&nbsp;LV"+ret[1].level;
                 }
                 else {
                     alert('失败');
                 }
-            })
+            },null)
         }
     </script>
     <style>
@@ -192,9 +191,9 @@
     </script> -->
 </head>
 
-<body>
+<body  onload="getUsermessage()">
     <div id="Usermessage" class="Usermessage_style">
-        <p id="msg" onload="getUsermessage()"></p>
+        <p id="msg"></p>
     </div>
     <div id="calendar" class="calendar">
         <div id="month_year" class="selecthead">

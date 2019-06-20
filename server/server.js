@@ -59,7 +59,7 @@ http.createServer(function (request, response) {
     try {
         // 如果访问服务器根目录
         if (targetPath == "/") {
-            response.end("server is running at http://localhost:8000");
+            response.end("server is running at http://localhost:8123");
         }
         // 如果本次访问不是请求文件
         else if (util.isFunction(value)) {
