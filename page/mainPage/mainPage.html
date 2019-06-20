@@ -59,12 +59,20 @@
         function getUsermessage() {
             $('account').get(function (ret) {
                 if (ret[0].status == '0') {
+<<<<<<< HEAD
                     document.getElementById("msg").innerHTML = '您好,' + ret[1].name + "&nbsp;&nbsp;&nbsp;LV" + ret[1].level;
+=======
+                    document.getElementById("msg").innerHTML='您好,'+ret[1].name+"&nbsp;&nbsp;&nbsp;LV"+ret[1].level;
+>>>>>>> e2be1769cc9e4e273ea4017da23131aebb4cceff
                 }
                 else {
                     alert('失败');
                 }
+<<<<<<< HEAD
             }, null)
+=======
+            },null)
+>>>>>>> e2be1769cc9e4e273ea4017da23131aebb4cceff
         }
     </script>
     <style>
@@ -199,7 +207,11 @@
     </script> -->
 </head>
 
+<<<<<<< HEAD
 <body onload="getUsermessage()">
+=======
+<body  onload="getUsermessage()">
+>>>>>>> e2be1769cc9e4e273ea4017da23131aebb4cceff
     <div id="Usermessage" class="Usermessage_style">
         <p id="msg"></p>
     </div>
